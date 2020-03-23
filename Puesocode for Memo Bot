@@ -1,0 +1,25 @@
+initialize("Memo Bot");
+//random memo bot stuff//
+
+const prefix = memo; //or smth like that//
+import srsBot.commands;
+import srsBot.messageArray;
+const discord = require discord.js;
+
+if (command = jot) {
+let username = discordID.messagePerson;
+binarySearch(username);
+  if (userDoesNotExist) let $'username'$ = []
+let whateverTheyAdd = messageArray.slice(2);
+username.push(whateverTheyAdd);
+}
+
+if (command = view) {
+let username = discord.ID.messagePerson;
+binarySearch(username);
+  if (userDoesNotExist) message.channel.send("Your username does not exist brainlet")
+  else message.channel.send(username)
+  
+  
+  I know this is horribly unabstracted
+  That's why I use yeet and stuff
