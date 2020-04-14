@@ -150,6 +150,16 @@
         timeIn.type = "time";
         timeIn.placeholder = "Due time";
         timeIn.id = "dueTimeInput";
+
+		let assignmentBox = document.createElement("form") //span for the radio boxes
+             let assignmentProject = document.createElement("input");
+             assignmentProject.type = "checkbox";
+             assignmentProject.name = "projectExam";
+             let projectText = document.createElement("text");
+             projectText.innerText = "Is it a Project/Exam?" //right now it just adds a star
+        assignmentBox.appendChild(assignmentProject);
+        assignmentBox.appendChild(projectText);
+
         let tempBtn = document.createElement("button");
 
         tempBtn.innerHTML = "Add assignment"
@@ -159,6 +169,10 @@
           tempTask.innerHTML = "<br />" + nameIn.value + " " + dateIn.value + " " + timeIn.value; //append new task
 
           tempTask.task = ntask;
+          if (assignmentBox.projectExam.checked) {
+          	tempTask.style.fontWeight = 'bold';
+          	tempTask.style.textDecoration = 'underline';
+          }
           let markdone = document.createElement("button"); //mark as done
           markdone.innerHTML = "Mark as done";
           markdone.correspondingTaskEl = tempTask;
@@ -179,6 +193,7 @@
         tempA.appendChild(nameIn);
         tempA.appendChild(dateIn);
         tempA.appendChild(timeIn);
+        tempA.appendChild(assignmentBox);
         tempA.appendChild(tempBtn);
 
 
