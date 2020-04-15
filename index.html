@@ -21,20 +21,24 @@
     
     <script>
  
-      function initmain () {        
-        teacherInput = document.getElementById('teacherInput')
+      function initmain () {       //Initialize Function
+        teacherInput = document.getElementById('teacherInput') //Sets the getElementByIds
         assignmentInput = document.getElementById('assignmentInput')
         dueDateInput = document.getElementById('dueDateInput')
         submitButton = document.getElementById('submitButton')
         colorInput = document.getElementById('colorInput')
-        submitButton.addEventListener("click",generateCardFromClick)
-        dateHTML = document.getElementById("date");
+
+        submitButton.addEventListener("click",generateCardFromClick) //Sets the submit button to generateCardFromClick()
+
+        dateHTML = document.getElementById("date"); //Sets the date for planner
         weekdayHTML = document.getElementById("weekday");
-        numDone = 0
+
+        numDone = 0 //Resets number of tasks done, numer of total tasks, and all relating to it
         numTask = 0
         completionHTML = document.getElementById("completionJS");
         completionHTML.innerHTML = "0%"
-        displayDate();
+
+        displayDate(); //Displays the date
 
       document.addEventListener("DOMContentLoaded", initmain)
       }
@@ -44,37 +48,37 @@
       	dateHTML.innerHTML = dateBackend.getMonth() + '/' + dateBackend.getDate();
       	let daynum = dateBackend.getDay();
       	let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      	weekdayHTML.innerHTML = days[daynum];
+      	weekdayHTML.innerHTML = days[daynum]; //Converts getDate's number into usable English date names
       }
 
-      function createCard (t,c) {
+      function createCard (t,c) { //Creates a subject card
         let displayDone = true;
 
-        let tempS = document.createElement('section')
+        let tempS = document.createElement('section') //Sets the basic premises like subject and ClassName of cards
         tempS.className = 'card'
         tempS.subject = new Subject(t)
-        tempS.style.backgroundColor = c
-        tempS.style.color = invertColor(c)
+        tempS.style.backgroundColor = c //Uses the invert color code in borrowed.js
+        tempS.style.color = invertColor(c) //Sets text color to the invert of background color
 
-        let tempB = document.createElement('button')
+        let tempB = document.createElement('button') //Creates a button that deletes the card on click
         tempB.addEventListener("click", function(){
           document.body.removeChild(tempS)
         })
         tempB.className = 'deleteButton'
         tempB.innerText = 'X'
 
-        let colorChange = document.createElement("input")
+        let colorChange = document.createElement("input") //Adds a color slider that changes the color of card
         colorChange.type = "color";
         colorChange.addEventListener("change", function() {
           tempS.style.backgroundColor = this.value;
-          tempS.style.color = invertColor(this.value);
+          tempS.style.color = invertColor(this.value); //Text color inverts along with slider color
         })
 
-        let tempT = document.createElement('h1')
+        let tempT = document.createElement('h1') //Sets the first h1 to class subject or teacher
         tempT.className = 'teacher'
         tempT.innerText = t
 
-        let cw = document.createElement('span') 
+        let cw = document.createElement('span') //When ___ is called, create a span of ____ assignments
         cw.className= 'assignment'
         cw.assignemnts = tempS.subject.classwork;
         let hw = document.createElement('span') 
@@ -87,11 +91,12 @@
         test.className= 'assignment'
         test.assignemnts = tempS.subject.test;
 
-        let selection = document.createElement("select");
+        let selection = document.createElement("select"); 
+        //Creates a selection tab where users select the type of assignment to add
         let v1 = document.createElement("option");
         v1.value = "classwork";
         v1.innerHTML = "classwork";
-        selection.options.add(v1);
+        selection.options.add(v1); //Upon selecting and hitting the add button, the items will be grouped and labeled
 
         let v2 = document.createElement("option");
         v2.value = "homework";
@@ -111,16 +116,18 @@
         let nameIn = document.createElement("input"); //input fields for adding new tasks
         nameIn.placeholder = "Assignment name";
         nameIn.id = "assignmentInput";
-        let dateIn = document.createElement("input");
+        let dateIn = document.createElement("input"); //Due date
         dateIn.type = "date";
         dateIn.placeholder = "Due date";
         dateIn.id = "dueDateInput";
-        let timeIn = document.createElement("input");
+        let timeIn = document.createElement("input"); //Due time
         timeIn.type = "time";
         timeIn.placeholder = "Due time";
         timeIn.id = "dueTimeInput";
-        let div = document.createElement("div");
-        let toggleBtn = document.createElement("button");
+
+        let div = document.createElement("div"); //Just creates a div for my OCD
+
+        let toggleBtn = document.createElement("button"); //Button toggles visibility of all card content
         toggleBtn.innerHTML = 'Toggle Visibility';
         toggleBtn.addEventListener("click", function(){
         	if (tempS.style.visibility == "hidden") {
@@ -129,54 +136,56 @@
         	else
         	{
         		tempS.style.visibility = "hidden";
-        		this.style.visibility = "visible";
+        		this.style.visibility = "visible"; //Button remains visible in case user wants to toggle back visibility
         	}
         })
-        let tempBtn = document.createElement("button");
 
+        let tempBtn = document.createElement("button"); //Appends a new task yea
         tempBtn.innerHTML = "Add assignment"
         tempBtn.addEventListener("click", function(){
-        	numTask = numTask + 1
+        	numTask = numTask + 1 //Registers a new task has been created, that is incomplete
         	update();
           var ntask = tempS.subject[selection.value].addTask(nameIn.value, dateIn.value, timeIn.value); 
           let tempTask = document.createElement("div");
           tempTask.innerHTML = "(" + selection.value + ") " + nameIn.value + " " + dateIn.value + " " + timeIn.value; //append new task
 
-          tempTask.task = ntask;
+          tempTask.task = ntask; //variable name
 
-          let markdone = document.createElement("button"); //mark as done
+          let markdone = document.createElement("button"); //Mark an assignment as done
           markdone.innerHTML = "Mark as done";
           markdone.correspondingTaskEl = tempTask;
           markdone.addEventListener("click", function() {
-           if (markdone.innerHTML == "Mark as done") {
+           if (markdone.innerHTML == "Mark as done") { //If the button says to mark as done, the button marks as done
             ntask.markAsDone();
-            markdone.innerHTML = "Unmark"
-            this.correspondingTaskEl.style.textDecoration = "line-through";
+            markdone.innerHTML = "Unmark" //Sets button to unmark for later use
+            this.correspondingTaskEl.style.textDecoration = "line-through"; //Puts a line through task
             numDone = numDone + 1
-            update();
+            update(); //Increases the number of assignments done by 1
            }else {
-        	markdone.innerHTML = "Mark as done";
+        	markdone.innerHTML = "Mark as done"; //If button says unmark, it unmarks the item
         	ntask.markAsUndone();
-        	this.correspondingTaskEl.style.textDecoration = "none";
-        	numDone = numDone - 1;
+        	this.correspondingTaskEl.style.textDecoration = "none"; //Removes the line through task
+        	numDone = numDone - 1; //Decreases number of assignments done by 1
         	update();
        		 }
           })
-          tempTask.appendChild(markdone);
+          tempTask.appendChild(markdone); 
           let hidecompleted = document.createElement("button");
+           //If the item is done, the user can choose to remove the assignment
           hidecompleted.innerHTML = "Hide";
           hidecompleted.correspondingTaskEl = tempTask;
           hidecompleted.addEventListener("click", function() {
             if(ntask.completed) {
-              this.correspondingTaskEl.style.display = "none";
+              this.correspondingTaskEl.style.display = "none"; //Removes assignment from the face of Earth
           	numTask = numTask - 1
-          	numDone = numDone - 1
+          	numDone = numDone - 1 
+          	//When an assignment is removed, it no longer counts towards the assignment number or finished assignment
           	update();
           	}
           })
           tempTask.appendChild(hidecompleted);
 
-          switch (selection.value) {
+          switch (selection.value) { //Sets variables to use later in HW/CW/Test/Proj
             case("homework"):
               var el = hw;
               break;
@@ -193,7 +202,7 @@
           el.appendChild(tempTask);
         });
 
-        tempS.appendChild(tempB)
+        tempS.appendChild(tempB) //A bunch of append childs
         tempS.appendChild(colorChange)
         tempS.appendChild(tempT)
 
@@ -213,19 +222,19 @@
         return tempS
       }
 
-      function generateCardFromClick() {
+      function generateCardFromClick() { //Generate card from the classname input, color of card input
         teacherInput = document.getElementById('teacherInput')
 
         displayCard(createCard(teacherInput.value,colorInput.value))
       }
 
-      function update() {
+      function update() { //Updates the completion bar!
       	completionPercent = ((numDone/numTask)*100) + '%'
       	completionHTML.innerHTML = completionPercent;
       	completionHTML.style.width = completionPercent;
       }
 
-      function displayCard (c) {
+      function displayCard (c) { //Self explanatory
         document.body.appendChild(c)
       }
 
